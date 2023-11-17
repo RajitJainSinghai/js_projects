@@ -3,9 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather app</title>
 </head>
 <body>
-    
+    <div class="weather_card">
+        <div class="seachbar">
+            <input class="searchinput" type="search" placeholder="city..">
+
+            <button class="searchicon"><img class="searchiconimage" src="./img/search.png" alt=""></button>
+        </div>
+
+        <div class="error">
+            <p>Invalid city name</p>
+
+        </div>
+
+<div class="weather">    
+        <img class="weather_img" src="./img/clouds.png" alt="">
+
+        <div class="nameandtemp">
+            <p class="temp">22°C</p>
+            <p class="city">Gurgoan</p>
+        </div>
+    <span class="centerize">
+        <div class="humaditydivi">
+            <img class="humadityImg" src="./img/humidity.png" alt="">
+            <b class="griding">
+            <p class="humaditypercentage">23%</p>
+            <p class="humaditytext">Humidity</p>
+        </b>
+    </div>
+
+        <div class="windspeeddivi">
+            <img class="windspeedImg" src="./img/wind.png" alt="">
+            <b class="griding">
+            <p class="windspeedpercentage">22km/hr</p>
+            <p class="windspeedtext">Windspeed</p>
+        </b>
+        </div>
+    </span>
+</div>
+
 </body>
 </html>
+
+<script>
+    const apiKey = "82f2db63fdae27c6dff8d7fbdc098880";
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+
+    const searchbox = document.querySelector(".searchinput");
+    const searchicon = document.querySelector(".searchicon");
+    const weatherIcon = document.querySelector(".weather_img");
+
+    async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        if(response.status == 404) {
+            document.querySelector(".error").style.display = "block";
+            document.querySelector(".weather").style.display = "none";
+        }
+        else {
+
+        
+            var data = await response.json();
+
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+            document.querySelector(".humaditypercentage").innerHTML = data.main.humidity + "%";
+            document.querySelector(".windspeedpercentage").innerHTML = data.wind.speed + " km/hr";
+
+            if(data.weather[0].main == "Clouds") {
+                weatherIcon.src = "img/clouds.png"
+            }
+            else if(data.weather[0].main == "Clear") {
+                weatherIcon.src = "img/clear.png"
+            }
+            else if(data.weather[0].main == "Rain") {
+                weatherIcon.src = "img/rain.png"
+            }
+            else if(data.weather[0].main == "Smoke") {
+                weatherIcon.src = "img/drizzle.png"
+            }
+            else if(data.weather[0].main == "Haze") {
+                weatherIcon.src = "img/mist.png"
+            }
+
+            document.querySelector(".weather").style.display = "block";
+            document.querySelector(".error").style.display = "none";
+
+        }
+    }
+
+    searchicon.addEventListener("click", ()=> {
+        checkWeather(searchbox.value);
+
+    })
+
+</script>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: sans-serif;
+}    
+.weather_card {
+    width: 400px;
+    height: auto;
+    background: linear-gradient(359deg, #b1e8ef, #ffecec);
+    margin: 50px auto;
+}
+.error {
+    text-align: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 150px;
+    font-size: 12px;
+    display: none;
+
+}
+.weather {
+    display: none;
+}
+.seachbar {
+    width: 100%;
+    position: relative;
+}
+.searchinput {
+    width: 95%;
+    padding: 10px;
+    border: 0;
+    margin: 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    text-transform: capitalize;
+    text-align: left;
+
+}
+.searchicon {
+    position: absolute;
+    width: 31px;
+    top: 10px;
+    right: 10px;
+    border: 1px solid lightgrey;
+    padding: 9px 18px;
+    border-radius: 50%;
+    cursor: pointer;
+
+}
+img.searchiconimage {
+    width: 14px;
+    margin: -2px -7px;
+    padding: 3px 0px 0;
+}
+
+
+.weather_img {
+    margin: 0 auto;
+    width: 50%;
+    display: block;
+}
+.nameandtemp {
+    font-size: 18px;
+    margin: 0 0 30px 0;
+}
+.city {
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+span.centerize {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding-bottom: 20px;
+
+}
+.humaditydivi, .windspeeddivi {
+    display: flex;
+    width: auto;
+    align-items: flex-start;
+}
+.windspeedImg, .humadityImg  {
+    width: 40px;
+}
+.griding {
+    font-weight: 100;
+    font-size: 12px;
+    padding: 0 10px;
+    line-height: 18px;
+    letter-spacing: 1px;
+}
+
+
+</style>
