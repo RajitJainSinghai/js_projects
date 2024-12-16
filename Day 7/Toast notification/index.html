@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/d61c297959.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <button id="green"  onclick="showToast(successMsg)">Success</button>
+        <button id="yellow" onclick="showToast(errorMsg)">Error</button>
+        <button id="red" onclick="showToast(invalidMsg)">Invalid</button>
+    </div>
+
+    <div id="toast_box">
+    </div>
+</body>
+</html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "poppins", sans-serif;
+    }
+
+    body {
+        background-color: antiquewhite;
+    }
+
+    .container {
+        margin: 50px;
+    }
+
+    .container button {
+        background-color: black;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        outline: 0;
+        border: 0;
+        border-radius: 10px;
+    }
+   
+    #red:hover {
+        background-color: red;
+        transition: 0.3s ease-in-out;
+    }
+
+    #yellow:hover {
+        background-color: rgb(235, 235, 140);
+        transition: 0.3s ease-in-out;
+
+    }
+    #green:hover {
+        background-color: green;
+        transition: 0.3s ease-in-out;
+    }
+    #toast_box {
+        position: absolute;
+        right: 0px;
+        bottom: 30px;
+        display: flex;
+        align-items: flex-end;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 20px 0;
+
+    }
+    .toast {
+    border: 1px solid;
+    width: 400px;
+    text-align: center;
+    padding: 10px;
+    background-color: white ;
+    color: rgb(41, 41, 41);
+    display: flex;
+    gap: 20px;
+    position: relative;
+    margin-bottom: 20px;
+
+    }
+    .toast.error i {
+        color : red;
+    }
+    .toast.Invalid i {
+        color : yellow;
+    }
+    .toast.Successfully i {
+        color : green;
+    }
+    .toast.error::after {
+        background: red;
+    }
+    .toast.toast.Invalid::after {
+        background: yellow;
+    }
+    .toast::after{
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 3px;
+        background: green;
+        animation: anim 5s linear forwards;
+    }
+    @keyframes anim {
+        100% {width: 0;
+        }
+    }
+</style>
+
+<script>
+    let toast_box = document.getElementById("toast_box");
+    let successMsg = '<i class="fa-regular fa-face-smile"></i> Successfully Submitted';
+    let errorMsg = '<i class="fa-regular fa-circle-xmark"></i>Please fix the error!';
+    let invalidMsg ='<i class="fa-regular fa-thumbs-down"></i>Invalid input , check again!';
+
+    function showToast(msg){
+    let toast = document.createElement("div");
+    toast.classList.add("toast");
+    toast.innerHTML = msg;
+    toast_box.appendChild(toast);
+
+    if(msg.includes('error')) {
+        toast.classList.add('error');
+    }
+    if(msg.includes('Invalid')) {
+        toast.classList.add('Invalid');
+    }
+    if(msg.includes('Successfully')) {
+        toast.classList.add('Successfully');
+    }
+    setTimeout(() => {
+        toast.remove();
+    },5000);
+    }
+</script>
